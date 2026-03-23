@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Base64 Decoder</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        #result { border: 1px solid #ccc; padding: 15px; background: #f9f9f9; word-break: break-all; }
+        img { max-width: 100%; border: 1px solid #000; }
+    </style>
+</head>
+<body>
+    <div id="result">Ожидание данных в URL (параметр ?data=...)...</div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const base64 = urlParams.get('data');
+
+        if (base64) {
+            const container = document.getElementById('result');
+            try {
+                // Проверка: если это картинка (начинается с типичных заголовков)
+                if (base64.startsWith('iVBORw') || base64.startsWith('/9j/')) {
+                    container.innerHTML = `<img src="data:image/png;base64,${base64}" />`;
+                } else {
+                    // Декодирование текста с поддержкой UTF-8 (кириллицы)
+                    const decoded = decodeURIComponent(escape(atob(base64)));
+                    container.innerText = decoded;
+                }
+            } catch (e) {
+                container.innerText = "Ошибка: неверный формат Base64";
+            }
+        }
+    </script>
+</body>
+</html>
