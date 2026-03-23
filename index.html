@@ -14,7 +14,7 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const base64 = urlParams.get('data');
+        const base64 = urlParams.get('data').replace(/-/g, '+').replace(/_/g, '/');
 
         if (base64) {
             const container = document.getElementById('result');
