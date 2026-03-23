@@ -23,15 +23,7 @@
                 if (base64.startsWith('iVBORw') || base64.startsWith('/9j/')) {
                     container.innerHTML = `<img src="data:image/png;base64,${base64}" />`;
                 } else {
-                    // Декодирование текста с поддержкой UTF-8 (кириллицы)
-                    // const decoded = decodeURIComponent(escape(atob(base64)));
-                    // 1. Декодируем Base64 в бинарную строку
-                    const binString = atob(base64);
-                    // 2. Превращаем бинарную строку в массив байтов (Uint8Array)
-                    const bytes = Uint8Array.from(binString, (m) => m.codePointAt(0));                   
-                    // 3. Декодируем байты как UTF-8
-                    const decoded = new TextDecoder().decode(bytes);
-                    container.innerText = decoded;
+                    container.setHTML(new TextDecoder().decode(Uint8Array.from(atob(base64), (m) => m.codePointAt(0))))
                 }
             } catch (e) {
                 container.innerText = "Ошибка: неверный формат Base64";
